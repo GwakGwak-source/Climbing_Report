@@ -1,0 +1,194 @@
+{
+  "_help": "암장 사전. brand_aliases 중 하나와 branch 별칭 중 하나가 정모 장소 글자에 함께 들어 있으면 그 지점으로 묶입니다. 띄어쓰기·기호·대소문자는 무시합니다. 지점이 하나뿐인 브랜드는 브랜드 이름만 있어도 묶입니다. aliases에는 '논더클'처럼 통째로 쓰이는 줄임말을 넣습니다.",
+  "brands": [
+    {
+      "brand": "더클라임",
+      "brand_aliases": ["더클라임", "더클", "theclimb"],
+      "gyms": [
+        {"branch": "강남", "aliases": ["강더클"], "region": "서울특별시", "lat": 37.497589, "lng": 127.031992},
+        {"branch": "논현", "aliases": ["논더클"], "region": "서울특별시", "lat": 37.508374, "lng": 127.022219},
+        {"branch": "마곡", "aliases": ["마더클"], "region": "서울특별시", "lat": 37.560555, "lng": 126.833891},
+        {"branch": "문래", "aliases": ["문더클"], "region": "서울특별시", "lat": 37.520567, "lng": 126.895005},
+        {"branch": "사당", "aliases": ["사더클"], "region": "서울특별시", "lat": 37.474479, "lng": 126.98148},
+        {"branch": "성수", "aliases": ["성더클"], "region": "서울특별시", "lat": 37.546768, "lng": 127.06528},
+        {"branch": "신림", "aliases": ["신더클"], "region": "서울특별시", "lat": 37.482309, "lng": 126.929019},
+        {"branch": "양재", "aliases": ["양더클"], "region": "서울특별시", "lat": 37.485185, "lng": 127.035884},
+        {"branch": "연남", "branch_aliases": ["연남", "홍대"], "aliases": ["연더클", "홍더클", "양화로186"], "region": "서울특별시", "lat": 37.557667, "lng": 126.925892},
+        {"branch": "이수", "aliases": ["이더클"], "region": "서울특별시", "lat": 37.482011, "lng": 126.981487}
+      ]
+    },
+    {
+      "brand": "클라이밍파크",
+      "brand_aliases": ["클라이밍파크", "클팍", "climbingpark"],
+      "gyms": [
+        {"branch": "강남", "aliases": ["강클팍"], "region": "서울특별시", "lat": 37.495538, "lng": 127.029196},
+        {"branch": "종로", "aliases": ["종클팍", "종팍"], "region": "서울특별시", "lat": 37.571106, "lng": 126.999909}
+      ]
+    },
+    {
+      "brand": "서울숲클라이밍",
+      "brand_aliases": ["서울숲클라이밍", "서울숲", "서숲"],
+      "gyms": [
+        {"branch": "구로", "aliases": ["구로숲"], "region": "서울특별시", "lat": 37.484927, "lng": 126.896538},
+        {"branch": "영등포", "aliases": ["영등숲", "영숲"], "region": "서울특별시", "lat": 37.517735, "lng": 126.900243},
+        {"branch": "잠실", "region": "서울특별시", "lat": 37.51103, "lng": 127.084156},
+        {"branch": "종로", "region": "서울특별시", "lat": 37.569705, "lng": 126.990024}
+      ]
+    },
+    {
+      "brand": "손상원클라이밍",
+      "brand_aliases": ["손상원", "손짐"],
+      "gyms": [
+        {"branch": "강남", "aliases": ["강손짐"], "region": "서울특별시", "lat": 37.492625, "lng": 127.029581},
+        {"branch": "을지로", "aliases": ["을손짐"], "region": "서울특별시", "lat": 37.568377, "lng": 126.982327},
+        {"branch": "판교", "region": "경기도", "lat": 37.40207873, "lng": 127.1070467}
+      ]
+    },
+    {
+      "brand": "담장",
+      "brand_aliases": ["담장"],
+      "gyms": [
+        {"branch": "신촌", "region": "서울특별시", "lat": 37.557559, "lng": 126.943174},
+        {"branch": "을지로", "region": "서울특별시", "lat": 37.564497, "lng": 126.995048}
+      ]
+    },
+    {
+      "brand": "피커스",
+      "brand_aliases": ["피커스", "peakers"],
+      "gyms": [
+        {"branch": "구로", "region": "서울특별시", "lat": 37.501157, "lng": 126.88277},
+        {"branch": "신촌", "region": "서울특별시", "lat": 37.556562, "lng": 126.940232},
+        {"branch": "종로", "region": "서울특별시", "lat": 37.57091093, "lng": 126.99139705}
+      ]
+    },
+    {
+      "_source": "카카오맵 장소 검색 (2026-11-25 확인)",
+      "brand": "투이얼즈클라임하우스",
+      "brand_aliases": ["투이얼즈", "2years", "이년집", "이년이네"],
+      "gyms": [{"branch": "염창", "region": "서울특별시", "lat": 37.54850432, "lng": 126.87619193}]
+    },
+    {
+      "brand": "서울볼더스",
+      "brand_aliases": ["서울볼더스", "seoulboulders"],
+      "gyms": [
+        {"branch": "목동", "region": "서울특별시", "lat": 37.520608, "lng": 126.872366},
+        {"branch": "선유도", "branch_aliases": ["선유도", "선유"], "region": "서울특별시", "lat": 37.542145, "lng": 126.891088}
+      ]
+    },
+    {
+      "brand": "알레클라이밍",
+      "brand_aliases": ["알레", "alle"],
+      "gyms": [{"branch": "혜화", "region": "서울특별시", "lat": 37.584091, "lng": 127.000706}]
+    },
+    {
+      "brand": "오프더월",
+      "brand_aliases": ["오프더월", "offthewall"],
+      "gyms": [{"branch": "이태원", "region": "서울특별시", "lat": 37.53433, "lng": 126.994371}]
+    },
+    {
+      "brand": "온플릭",
+      "brand_aliases": ["온플릭", "onflic"],
+      "gyms": [{"branch": "천호", "region": "서울특별시", "lat": 37.540805, "lng": 127.124557}]
+    },
+    {
+      "brand": "훅클라이밍",
+      "brand_aliases": ["훅클라이밍", "훅클"],
+      "gyms": [{"branch": "왕십리", "region": "서울특별시", "lat": 37.55822, "lng": 127.035483}]
+    },
+    {
+      "brand": "스톤즈클라이밍",
+      "brand_aliases": ["스톤즈", "stones"],
+      "gyms": [{"branch": "낙성대", "region": "서울특별시", "lat": 37.474679, "lng": 126.96986}]
+    },
+    {
+      "brand": "그루트클라이밍",
+      "brand_aliases": ["그루트", "groot"],
+      "gyms": [{"branch": "", "region": "서울특별시", "lat": 37.542333, "lng": 127.048565}]
+    },
+    {
+      "brand": "페퍼클라이밍",
+      "brand_aliases": ["페퍼클라이밍", "페퍼"],
+      "gyms": [{"branch": "원흥", "region": "경기도", "lat": 37.648397, "lng": 126.873258}]
+    },
+
+    {
+      "_source": "아래 경기 암장 좌표는 카카오맵 장소 검색 결과(2026-11-25 확인)",
+      "brand": "클라임어스",
+      "brand_aliases": ["클라임어스", "climbus"],
+      "gyms": [
+        {"branch": "모란", "branch_aliases": ["모란", "성남"], "region": "경기도", "lat": 37.43027756, "lng": 127.12986566},
+        {"branch": "미사", "branch_aliases": ["미사", "하남"], "region": "경기도", "lat": 37.56225036, "lng": 127.19271884}
+      ]
+    },
+    {
+      "brand": "캐치스톤",
+      "brand_aliases": ["캐치스톤", "catchstone"],
+      "gyms": [{"branch": "부천", "region": "경기도", "lat": 37.48557141, "lng": 126.78229926}]
+    },
+    {
+      "brand": "킨디클라이밍",
+      "brand_aliases": ["킨디", "kindi"],
+      "gyms": [{"branch": "수원", "region": "경기도", "lat": 37.26360618, "lng": 126.99891774}]
+    },
+    {
+      "brand": "클라임투게더",
+      "brand_aliases": ["클라임투게더", "클투", "climbtogether"],
+      "gyms": [{"branch": "수원 영통", "branch_aliases": ["수원", "영통"], "region": "경기도", "lat": 37.24513308, "lng": 127.06179535}]
+    },
+    {
+      "brand": "그래비티클라이밍",
+      "brand_aliases": ["그래비티클라이밍", "그래비티"],
+      "gyms": [{"branch": "영통", "branch_aliases": ["영통", "수원", "매탄"], "region": "경기도", "lat": 37.25816595, "lng": 127.0455237}]
+    },
+    {
+      "brand": "슈퍼비클라이밍",
+      "brand_aliases": ["슈퍼비", "superb"],
+      "gyms": [{"branch": "영통", "region": "경기도", "lat": 37.25293487, "lng": 127.07630419}]
+    },
+    {
+      "brand": "락트리클라이밍",
+      "brand_aliases": ["락트리", "rocktree"],
+      "gyms": [{"branch": "분당", "branch_aliases": ["분당", "수내"], "region": "경기도", "lat": 37.37883194, "lng": 127.11328565}]
+    },
+    {
+      "brand": "에어즈락클라이밍",
+      "brand_aliases": ["에어즈락", "ayersrock"],
+      "gyms": [{"branch": "범계", "region": "경기도", "lat": 37.39039126, "lng": 126.94916692}]
+    },
+    {
+      "brand": "더렛지클라이밍",
+      "brand_aliases": ["더렛지", "theledge"],
+      "gyms": [{"branch": "안양", "aliases": ["시민대로115"], "region": "경기도", "lat": 37.38745222, "lng": 126.94533865}]
+    },
+    {
+      "brand": "스파이시클라이밍",
+      "brand_aliases": ["스파이시", "spicy"],
+      "gyms": [{"branch": "산본", "branch_aliases": ["산본", "군포"], "region": "경기도", "lat": 37.37418083, "lng": 126.94490571}]
+    },
+    {
+      "brand": "클라임어클락",
+      "brand_aliases": ["클라임어클락", "climboclock"],
+      "gyms": [{"branch": "동탄", "branch_aliases": ["동탄", "방교"], "region": "경기도", "lat": 37.18036416, "lng": 127.09183906}]
+    },
+    {
+      "brand": "프리월클라이밍",
+      "brand_aliases": ["프리월", "freewall"],
+      "gyms": [{"branch": "평택지제", "branch_aliases": ["지제", "평택"], "region": "경기도", "lat": 37.00911167, "lng": 127.09076296}]
+    },
+    {
+      "brand": "퍼즐클라이밍",
+      "brand_aliases": ["퍼즐클라이밍", "퍼즐"],
+      "gyms": [{"branch": "다산", "branch_aliases": ["다산", "남양주"], "region": "경기도", "lat": 37.6142755, "lng": 127.15401084}]
+    },
+    {
+      "brand": "코알라클라이밍",
+      "brand_aliases": ["코알라"],
+      "gyms": [{"branch": "킨텍스", "branch_aliases": ["킨텍스", "일산"], "region": "경기도", "lat": 37.67681001, "lng": 126.74765519}]
+    },
+    {
+      "brand": "픽클라이밍",
+      "brand_aliases": ["픽클라이밍", "픽클"],
+      "gyms": [{"branch": "김포", "branch_aliases": ["김포", "구래"], "region": "경기도", "lat": 37.64611811, "lng": 126.62753451}]
+    }
+  ]
+}

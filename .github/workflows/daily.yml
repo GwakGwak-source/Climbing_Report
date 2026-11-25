@@ -1,0 +1,42 @@
+name: daily report
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # 매일 09:00 KST (GitHub 사정으로 몇 분~수십 분 늦을 수 있음)
+  workflow_dispatch:        # Actions 탭에서 수동 실행
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-report
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 수집 + 리포트 생성
+        env:
+          TZ: Asia/Seoul
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}   # 없어도 동작 (새 암장 좌표 자동 검색만 꺼짐)
+        run: python main.py
+
+      - name: 결과 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs data
+          if git diff --cached --quiet; then
+            echo "변경 없음"
+          else
+            git commit -m "report $(date +%F)"
+            git push
+          fi
