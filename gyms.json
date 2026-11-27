@@ -27,7 +27,7 @@
     },
     {
       "brand": "서울숲클라이밍",
-      "brand_aliases": ["서울숲클라이밍", "서울숲", "서숲"],
+      "brand_aliases": ["서울숲클라이밍", "서울숲", "서숲", "설숲"],
       "gyms": [
         {"branch": "구로", "aliases": ["구로숲"], "region": "서울특별시", "lat": 37.484927, "lng": 126.896538},
         {"branch": "영등포", "aliases": ["영등숲", "영숲"], "region": "서울특별시", "lat": 37.517735, "lng": 126.900243},
@@ -49,7 +49,7 @@
       "brand_aliases": ["담장"],
       "gyms": [
         {"branch": "신촌", "region": "서울특별시", "lat": 37.557559, "lng": 126.943174},
-        {"branch": "을지로", "region": "서울특별시", "lat": 37.564497, "lng": 126.995048}
+        {"branch": "을지로", "aliases": ["을담"], "region": "서울특별시", "lat": 37.564497, "lng": 126.995048}
       ]
     },
     {
@@ -82,7 +82,7 @@
     },
     {
       "brand": "오프더월",
-      "brand_aliases": ["오프더월", "offthewall"],
+      "brand_aliases": ["오프더월", "옵더월", "offthewall"],
       "gyms": [{"branch": "이태원", "region": "서울특별시", "lat": 37.53433, "lng": 126.994371}]
     },
     {
@@ -106,6 +106,18 @@
       "gyms": [{"branch": "", "region": "서울특별시", "lat": 37.542333, "lng": 127.048565}]
     },
     {
+      "_source": "카카오맵 장소 검색 (2026-11-27 확인)",
+      "brand": "닷클라이밍짐",
+      "brand_aliases": ["닷클라이밍", "dotclimbing"],
+      "gyms": [{"branch": "문정", "region": "서울특별시", "lat": 37.484331, "lng": 127.121789}]
+    },
+    {
+      "_source": "카카오맵 장소 검색 (2026-11-27 확인)",
+      "brand": "어거스트클라이밍",
+      "brand_aliases": ["어거스트클라이밍", "어거스트", "august"],
+      "gyms": [{"branch": "가양", "branch_aliases": ["가양"], "region": "서울특별시", "lat": 37.56304, "lng": 126.85222}]
+    },
+    {
       "brand": "페퍼클라이밍",
       "brand_aliases": ["페퍼클라이밍", "페퍼"],
       "gyms": [{"branch": "원흥", "region": "경기도", "lat": 37.648397, "lng": 126.873258}]
@@ -124,6 +136,12 @@
       "brand": "캐치스톤",
       "brand_aliases": ["캐치스톤", "catchstone"],
       "gyms": [{"branch": "부천", "region": "경기도", "lat": 37.48557141, "lng": 126.78229926}]
+    },
+    {
+      "_source": "카카오맵 장소 검색 (2026-11-27 확인)",
+      "brand": "피크닉클라이밍",
+      "brand_aliases": ["피크닉클라이밍", "피크닉", "picnic"],
+      "gyms": [{"branch": "수원", "branch_aliases": ["수원", "인계"], "region": "경기도", "lat": 37.261016, "lng": 127.032438}]
     },
     {
       "brand": "킨디클라이밍",
