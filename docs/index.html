@@ -76,12 +76,12 @@ footer a{color:var(--link)}
 </style></head>
 <body><main>
 <h1>🧗 클라이밍 정모 리포트</h1>
-<div class="meta">경기도 · 서울 · 2026-11-27 20:15 기준 · 소모임 공개 정모 일정</div>
+<div class="meta">경기도 · 서울 · 2026-11-27 20:17 기준 · 소모임 공개 정모 일정</div>
 <div class="regions" id="regions" role="tablist" aria-label="지역"></div>
 <div class="stats" id="stats"></div>
 <div class="bar"><div class="row" id="days"></div><div class="row" id="filters"></div></div>
 <div class="mapbox" id="mapbox"><div id="map"></div><div class="wheelhint" id="wheelhint">지도를 한 번 누르거나 Ctrl + 스크롤로 확대</div></div>
-<div class="maphint" id="maphint">원 숫자 = 참석 신청 인원 · 보라색 = 낮클·퇴근클 모두 · 원을 누르면 정모 목록 · 확대하면 암장 이름 · ⤢ 크게 보기 · ◎ 전체 보기 · 목록의 📍로 위치 찾기</div>
+<div class="maphint" id="maphint">원 숫자 = 참석 신청 인원 · 보라색 = 낮클·퇴근클 모두 · 원을 누르면 정모 목록 · 확대하면 암장 이름 · ⤢ 크게 보기 · ◎ 전체 보기 · ⌖ 내 위치 근처(위치 권한 허용 시) · 목록의 📍로 위치 찾기</div>
 <div id="list"></div>
 <noscript><p>이 페이지는 JavaScript가 필요합니다.</p></noscript>
 <footer>
@@ -113,18 +113,19 @@ function short(rg){ return rg.replace(/(특별자치시|특별자치도|특별�
 var allRows = R.days.reduce(function(a,d){return a.concat(d.rows);}, []);
 var present = R.regions.filter(function(rg){ return allRows.some(function(r){return r.region===rg;}); });
 var regionBox = document.getElementById('regions'), regionBtns = [];
+var hashRegion = present.filter(function(rg){ return short(rg) === decodeURIComponent(location.hash.slice(1)); })[0];
+function setRegion(rg, updateHash){
+  state.region = rg;
+  regionBtns.forEach(function(x){ x.setAttribute('aria-selected', String(x.dataset.region === rg)); });
+  if (updateHash) { try { history.replaceState(null, '', '#' + short(rg)); } catch (e) {} }
+  refresh();
+}
 if (present.length > 1) {
-  var want = decodeURIComponent(location.hash.slice(1));
-  state.region = present.filter(function(rg){ return short(rg) === want; })[0] || present[0];
+  state.region = hashRegion || present[0];
   present.forEach(function(rg){
     var n = count(allRows.filter(function(r){return r.region===rg;}));
-    var b = el('button',{'role':'tab','aria-selected':String(rg===state.region)},[short(rg)+'권', el('small',{text:n+'건'})]);
-    b.onclick = function(){
-      state.region = rg;
-      regionBtns.forEach(function(x){ x.setAttribute('aria-selected', String(x===b)); });
-      try { history.replaceState(null, '', '#' + short(rg)); } catch (e) {}
-      refresh();
-    };
+    var b = el('button',{'role':'tab','aria-selected':String(rg===state.region),'data-region':rg},[short(rg)+'권', el('small',{text:n+'건'})]);
+    b.onclick = function(){ setRegion(rg, true); };
     regionBtns.push(b); regionBox.appendChild(b);
   });
 } else {
@@ -166,6 +167,7 @@ var f = document.getElementById('filters');
 
 // 지도
 var map = null, layer = null, markers = {}, bounds = null, LABEL_ZOOM = 13;
+var me = null, meMarker = null, NEAR_KM = 40;  // 내 위치: 가장 가까운 암장이 40km 안일 때만 쓴다
 var mapbox = document.getElementById('mapbox'), wheelhint = document.getElementById('wheelhint');
 if (window.L) {
   map = L.map('map', {scrollWheelZoom:true, zoomSnap:0.5, wheelPxPerZoomLevel:90}).setView([37.54, 126.99], 11);
@@ -193,6 +195,9 @@ if (window.L) {
     var box = L.DomUtil.create('div', 'leaflet-bar mapbtns');
     var full = L.DomUtil.create('a', '', box); full.href = '#'; full.title = '크게 보기'; full.textContent = '⤢';
     var fit = L.DomUtil.create('a', '', box); fit.href = '#'; fit.title = '전체 보기'; fit.textContent = '◎';
+    var loc = L.DomUtil.create('a', '', box); loc.href = '#'; loc.title = '내 위치 근처'; loc.setAttribute('aria-label', '내 위치 근처');
+    loc.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-3px" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="4.5"/><circle cx="8" cy="8" r="1.2" fill="currentColor"/><path d="M8 0v3M8 13v3M0 8h3M13 8h3"/></svg>';
+    L.DomEvent.on(loc, 'click', function(e){ L.DomEvent.preventDefault(e); if (me) homeView(); else locate(true); });
     L.DomEvent.disableClickPropagation(box);
     L.DomEvent.on(full, 'click', function(e){ L.DomEvent.preventDefault(e); toggleFull(); full.textContent = mapbox.classList.contains('full') ? '✕' : '⤢'; full.title = mapbox.classList.contains('full') ? '닫기' : '크게 보기'; });
     L.DomEvent.on(fit, 'click', function(e){ L.DomEvent.preventDefault(e); fitAll(); });
@@ -211,6 +216,42 @@ function toggleFull(){
   setTimeout(function(){ map.invalidateSize(); }, 50);
 }
 function fitAll(){ if (bounds) map.fitBounds(bounds, {padding:[36,36], maxZoom:14}); }
+
+// 내 위치: 허용하면 내 위치와 가까운 암장 3곳이 보이게 지도를 맞춘다. 거부하거나 멀면 전체 보기.
+function km(a, b){
+  var x = (b[1]-a[1]) * Math.cos((a[0]+b[0]) / 2 * Math.PI / 180), y = b[0]-a[0];
+  return Math.sqrt(x*x + y*y) * 111.32;
+}
+function homeView(){
+  if (!map) return;
+  if (me && bounds) {
+    var near = bounds.slice().sort(function(a,b){ return km(me,a) - km(me,b); }).slice(0, 3);
+    map.fitBounds([me].concat(near), {padding:[36,36], maxZoom:14});
+  } else if (me) map.setView(me, 13);
+  else fitAll();
+}
+function locate(asked){
+  if (!map || !navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(function(p){
+    var here = [p.coords.latitude, p.coords.longitude];
+    var gymRows = allRows.filter(function(r){ return r.lat != null; });
+    var nearest = gymRows.sort(function(a,b){ return km(here,[a.lat,a.lng]) - km(here,[b.lat,b.lng]); })[0];
+    if (!nearest || km(here, [nearest.lat, nearest.lng]) > NEAR_KM) {
+      if (asked) alert('가까운 암장이 없어서 전체 지도를 보여 줍니다.');
+      return;
+    }
+    me = here;
+    if (!meMarker) {
+      meMarker = L.circleMarker(me, {radius:7, color:'#fff', weight:2, fillColor:'#2563eb', fillOpacity:1}).addTo(map);
+      meMarker.bindTooltip('내 위치', {direction:'top', offset:[0,-6]});
+    } else meMarker.setLatLng(me);
+    // 주소에 #서울 같은 지역이 없으면, 가장 가까운 암장의 지역 탭으로 연다
+    if (!hashRegion && regionBtns.length && nearest.region && nearest.region !== state.region) setRegion(nearest.region, false);
+    else homeView();
+  }, function(){
+    if (asked) alert('위치를 가져오지 못했습니다. 브라우저에서 위치 권한을 허용해 주세요.');
+  }, {enableHighAccuracy:false, timeout:10000, maximumAge:600000});
+}
 
 function popupFor(g){
   var box = el('div',{'class':'pop'},[el('h4',{text:g.name}),
@@ -247,7 +288,7 @@ function drawMap(list){
     pts.push([g.lat, g.lng]);
   });
   bounds = pts.length ? pts : null;
-  fitAll();
+  homeView();
   mapbox.classList.toggle('labels', map.getZoom() >= LABEL_ZOOM);
 }
 function showOnMap(gym){
@@ -291,7 +332,8 @@ function drawList(list){
 function draw(){ var list = rows(state.day); drawMap(list); drawList(list); }
 function refresh(){ drawStats(); drawDayCounts(); draw(); }
 drawStats(); drawDayCounts(); drawList(rows(state.day));
-if (document.readyState === 'complete') draw(); else window.addEventListener('load', draw);
+function start(){ draw(); locate(false); }
+if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
 })();
 </script>
 </main></body></html>
