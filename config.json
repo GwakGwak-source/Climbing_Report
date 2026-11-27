@@ -3,6 +3,7 @@
   "regions": ["경기도", "서울특별시"],
   "days": 7,
   "evening_from": "17:00",
+  "drop_unmapped": true,
 
   "seed_pages": [
     "/수원-클라이밍-모임",

@@ -145,10 +145,15 @@ def collect(cfg, groups: dict, now: datetime, max_requests: int, full: bool, see
                     queue.append(c["gid"])
     fresh = len(events)
 
-    # 이번에 읽지 않은 모임의 정모는 지난 결과에서 가져온다 (지난 날짜는 버림)
-    key_today = now.strftime("%Y%m%d")
+    # 지난 결과에서 이어 쓰는 정모 (지난 날짜는 버림)
+    # - 이번에 읽지 않은 모임: 그대로
+    # - 이번에 읽은 모임: 소모임은 이미 시작한 정모를 페이지에서 빼므로, 오늘 정모 중 시작 시각이 지난 것만 남긴다
+    key_today, hhmm = now.strftime("%Y%m%d"), now.strftime("%H%M")
+    fresh_eids = {e["eid"] for e in events}
     for e in last_events:
-        if e["gid"] not in seen and e["gid"] in groups and e["date"] >= key_today:
+        if e["gid"] not in groups or e["date"] < key_today or e["eid"] in fresh_eids:
+            continue
+        if e["gid"] not in seen or (e["date"] == key_today and e["time"] <= hhmm):
             events.append(e)
     print(f"[done] 요청 {fetch.count}회, 모임 {len(seen)}곳 새로 읽음, 정모 {fresh}건 + 지난 결과 {len(events) - fresh}건")
 
@@ -173,6 +178,7 @@ def build_report(cfg, events, gyms: GymIndex, prev_eids: set, now: datetime, gro
 
     rows: dict[tuple, dict] = {}
     seen_eids = set()
+    dropped: dict[str, int] = {}
     for e in events:
         if e["date"] not in keyset or e["eid"] in seen_eids:
             continue
@@ -181,6 +187,13 @@ def build_report(cfg, events, gyms: GymIndex, prev_eids: set, now: datetime, gro
         if gym.lat is None:
             # 장소 칸이 '-', '단톡참고'처럼 비어 있어도 제목에 '사당 더클 퇴근클'처럼 암장이 적힌 경우가 많다
             gym = gyms.match_title(e["title"]) or gym
+        if gym.lat is None:
+            # 그래도 없으면 모임 이름까지 붙여서 찾는다 (예: 장소 '더클라임' + 모임 '사당 클라이밍' → 더클라임 사당)
+            gym = gyms.match_title(f"{e['place']} {e['title']} {e.get('group', '')}") or gym
+        if gym.lat is None and cfg.get("drop_unmapped", True):
+            # 지도에 찍을 수 없는 정모는 뺀다
+            dropped[gym.name] = dropped.get(gym.name, 0) + 1
+            continue
         region = gym.region or e.get("group_region") or ""
         if regions and region not in regions:
             continue
@@ -222,6 +235,7 @@ def build_report(cfg, events, gyms: GymIndex, prev_eids: set, now: datetime, gro
         "groups_count": groups_count,
         "days": days,
         "eids": sorted(seen_eids),
+        "dropped": dropped,
     }
 
 
@@ -285,6 +299,10 @@ def main():
         print(f"[gyms] 사전에 없는 장소 {len(unmatched)}곳 (gyms.json에 추가하면 지도에 나옵니다):")
         for u in unmatched:
             print("   -", u)
+    if report["dropped"]:
+        print(f"[gyms] 지도에 없어서 뺀 정모 {sum(report['dropped'].values())}건 (gyms.json에 추가하면 나옵니다):")
+        for name, n in sorted(report["dropped"].items(), key=lambda x: -x[1]):
+            print(f"   - {name} ({n}건)")
 
 
 if __name__ == "__main__":
