@@ -189,6 +189,12 @@
       "gyms": [{"branch": "동탄", "branch_aliases": ["동탄", "방교"], "region": "경기도", "lat": 37.18036416, "lng": 127.09183906}]
     },
     {
+      "_source": "카카오맵 장소 검색 (2026-11-27 확인). '마그' = 마운틴그라운드",
+      "brand": "마운틴그라운드",
+      "brand_aliases": ["마운틴그라운드", "마그", "mountainground"],
+      "gyms": [{"branch": "동탄", "region": "경기도", "lat": 37.16611, "lng": 127.106077}]
+    },
+    {
       "brand": "프리월클라이밍",
       "brand_aliases": ["프리월", "freewall"],
       "gyms": [{"branch": "평택지제", "branch_aliases": ["지제", "평택"], "region": "경기도", "lat": 37.00911167, "lng": 127.09076296}]
