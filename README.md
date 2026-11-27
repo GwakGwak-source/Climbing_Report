@@ -4,7 +4,9 @@
 지도는 Leaflet + OpenStreetMap이라 API 키가 없어도 됩니다.
 
 ```
-python main.py                # 수집 + docs/index.html 생성
+python main.py                # 수집 + docs/index.html 생성 (그날 첫 실행은 전체, 그다음은 가벼운 실행)
+python main.py --mode full    # 강제로 전체 실행
+python main.py --mode light   # 강제로 가벼운 실행
 python main.py --max 40       # 요청 수를 줄여서 빠르게 시험
 python main.py --render-only  # 마지막 수집 결과로 페이지만 다시 생성 (gyms.json 고친 뒤 확인용)
 ```
@@ -20,6 +22,21 @@ Python 3.10 이상, 외부 패키지 없음.
 3. **정모 읽기**: 모임 페이지에 공개된 정모 일정(날짜·시간·장소·참석/정원)을 읽습니다. 멤버 이름 같은 개인 정보는 저장하지 않습니다.
 4. **암장 묶기**: `gyms.json` 사전으로 '논현 더클라임', '논더클', '더클라임 논현점'을 모두 `더클라임 논현`으로 묶고 좌표를 붙입니다.
 5. **페이지 만들기**: `docs/index.html`, `docs/reports/날짜.html`, `docs/archive.html`을 씁니다.
+
+### 요청 줄이기 (6시간마다 실행)
+
+GitHub에서는 6시간마다 돌지만, 소모임에 보내는 요청은 하루 한 번 모두 읽는 것보다 조금 많은 정도로 묶어 둡니다.
+
+| 실행 | 언제 | 읽는 페이지 | 요청 수(지금 모임 115곳 기준) |
+|---|---|---|---|
+| 전체 | 그날(KST) 첫 실행 | 정모가 있던 모임 전부 + 비슷한 모임 넓히기 | 약 90회 |
+| 가벼운 | 그날 나머지 실행 | 오늘·내일 정모가 있는 모임 중 가장 오래전에 본 곳부터 `light_max_requests`곳 | 최대 20회 |
+
+- 지난번에 정모가 하나도 없던 모임은 `idle_group_every_days`(3)일에 한 번만 봅니다.
+- 검색·지역 페이지(`seed_pages`)는 `seed_every_days`(7)일에 한 번만 봅니다.
+- 이번에 읽지 않은 모임의 정모는 지난 결과(`data/last_run.json`)에서 그대로 가져오므로 페이지에서 빠지지 않습니다.
+- 페이지는 gzip으로 받아 전송량도 줄입니다.
+- 하루 합계는 대략 150~160회입니다(6시간마다 전부 읽으면 약 480회). `light_max_requests`를 0으로 두면 하루 한 번만 읽고 나머지 실행은 페이지만 다시 만듭니다.
 
 요청은 1초 간격, 한 번 실행에 최대 300회입니다(`request_delay_sec`, `max_requests`).
 소모임 robots.txt가 허용하는 공개 HTML 페이지만 읽고, 내부 API는 쓰지 않습니다.
@@ -60,7 +77,8 @@ Python 3.10 이상, 외부 패키지 없음.
 1. 이 폴더를 GitHub 저장소로 올립니다.
 2. Settings → Pages → Source: **Deploy from a branch**, Branch: `main` / `/docs`.
 3. Settings → Actions → General → Workflow permissions: **Read and write permissions**.
-4. Actions 탭 → `daily report` → **Run workflow**로 한 번 돌려 봅니다. 이후 매일 09:00(KST)에 자동으로 돌아갑니다.
+4. Actions 탭 → `daily report` → **Run workflow**로 한 번 돌려 봅니다. 이후 6시간마다(05:07 · 11:07 · 17:07 · 23:07 KST) 자동으로 돌아갑니다.
+   시간을 바꾸려면 `.github/workflows/daily.yml`의 `cron`(UTC 기준)을 고칩니다.
 
 ## 주의
 

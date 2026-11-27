@@ -7,6 +7,7 @@ Next.js가 페이지에 심어 두는 데이터(self.__next_f.push)를 해석해
 """
 from __future__ import annotations
 
+import gzip
 import json
 import re
 import time
@@ -14,7 +15,7 @@ import urllib.parse
 import urllib.request
 
 BASE = "https://www.somoim.co.kr"
-UA = "Mozilla/5.0 (compatible; climbing-report/1.0; +https://github.com/)"
+UA = "Mozilla/5.0 (compatible; climbing-report/1.1; +https://github.com/GwakGwak-source/Climbing_Report)"
 CLIMBING_IT2 = "18007"  # 소모임 2차 관심사 코드: 운동/스포츠 > 클라이밍
 CLIMB_WORDS = ("클라이밍", "클밍", "볼더링", "climb", "암장", "볼더")
 
@@ -42,10 +43,14 @@ class Fetcher:
         self.count += 1
         for attempt in range(3):
             try:
-                req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Language": "ko-KR,ko"})
+                req = urllib.request.Request(url, headers={
+                    "User-Agent": UA, "Accept-Language": "ko-KR,ko", "Accept-Encoding": "gzip"})
                 with urllib.request.urlopen(req, timeout=30) as r:
                     self._last = time.monotonic()
-                    return r.read().decode("utf-8", "replace")
+                    body = r.read()
+                    if r.headers.get("Content-Encoding") == "gzip":  # 압축해서 받아 전송량을 줄인다
+                        body = gzip.decompress(body)
+                    return body.decode("utf-8", "replace")
             except Exception as e:  # noqa: BLE001 - 네트워크 오류는 건너뛰고 계속
                 self._last = time.monotonic()
                 if attempt == 2:

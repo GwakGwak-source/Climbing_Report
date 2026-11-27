@@ -71,6 +71,9 @@
   "crawl_similar": true,
 
   "max_requests": 300,
+  "light_max_requests": 20,
+  "idle_group_every_days": 3,
+  "seed_every_days": 7,
   "request_delay_sec": 1.0,
   "drop_group_after_idle_days": 60,
 
